@@ -17,16 +17,16 @@ export async function generateMetadata({ params }) {
   const data = await AnimeInfoAnilist(AnimeID)
   const hasAnime = (data?.title?.english || data?.title?.romaji)
   return {
-    title: hasAnime ? `Watch ${data?.title?.english || data?.title?.romaji} - Taro` || 'Loading...' : `Anime Not Found`,
+    title: hasAnime ? `Watch ${data?.title?.english || data?.title?.romaji} - WeebHub Nexus` || 'Loading...' : `Anime Not Found`,
     description: data?.description?.slice(0, 180),
     openGraph: {
-      title: "Watch" + ' - ' + data?.title?.english || data?.title?.romaji + "in Taro",
+      title: "Watch" + ' - ' + data?.title?.english || data?.title?.romaji + "in WeebHub Nexus",
       images: [data?.coverImage?.extraLarge],
       description: data?.description,
     },
     twitter: {
       card: "summary",
-      title: "Watch" + ' - ' + data?.title?.english || data?.title?.romaji + "in Taro",
+      title: "Watch" + ' - ' + data?.title?.english || data?.title?.romaji + "in WeebHub Nexus",
       description: data?.description?.slice(0, 180),
     },
   }

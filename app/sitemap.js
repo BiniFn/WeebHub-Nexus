@@ -8,7 +8,7 @@ export default async function sitemap() {
   ]);
 
   const generateSitemapEntries = (data) => data.map((anime) => ({
-    url: `https://taro-anime.vercel.app/anime/info/${anime.id}`,
+    url: `https://weebhub-nexus-anime.vercel.app/anime/info/${anime.id}`,
     lastModified: new Date(),
   }));
 
@@ -18,7 +18,7 @@ export default async function sitemap() {
 
   return [
     {
-      url: 'https://taro-anime.vercel.app',
+      url: 'https://weebhub-nexus-anime.vercel.app',
       lastModified: new Date(),
       changeFrequency: 'yearly',
       priority: 1,

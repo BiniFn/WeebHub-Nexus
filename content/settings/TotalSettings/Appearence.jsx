@@ -8,7 +8,7 @@ const Appearence = () => {
 
 
   useEffect(() => {
-    const jsonifiedLocalsotrage = JSON.parse(localStorage.getItem("setting.Taro") || '{}')
+    const jsonifiedLocalsotrage = JSON.parse(localStorage.getItem("setting.WeebHub Nexus") || '{}')
     if (jsonifiedLocalsotrage?.appearence) {
       if (jsonifiedLocalsotrage?.appearence?.featuredSection) setFeaturedSection(jsonifiedLocalsotrage?.appearence?.featuredSection === true || false);
       if (jsonifiedLocalsotrage?.appearence?.continueWatchingSection) setContinueWatchingSection(jsonifiedLocalsotrage?.appearence?.continueWatchingSection === true || false)
@@ -16,19 +16,19 @@ const Appearence = () => {
   }, [])
 
   useEffect(() => {
-    const LocalsotrageData = localStorage.getItem("setting.Taro")
+    const LocalsotrageData = localStorage.getItem("setting.WeebHub Nexus")
 
     if (LocalsotrageData) {
       let jsonifiedLocalsotrage = JSON.parse(LocalsotrageData || "{}")
 
-      localStorage.setItem("setting.Taro", JSON.stringify({
+      localStorage.setItem("setting.WeebHub Nexus", JSON.stringify({
         ...jsonifiedLocalsotrage, appearence: {
           featuredSection,
           continueWatchingSection
         }
       }))
     } else {
-      localStorage.setItem("setting.Taro", JSON.stringify({
+      localStorage.setItem("setting.WeebHub Nexus", JSON.stringify({
         appearence: {
           featuredSection: true,
           continueWatchingSection: true

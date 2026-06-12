@@ -24,7 +24,7 @@ const FeaturedAnime = ({ data }) => {
 
   useEffect(() => {
     if (typeof window !== undefined) {
-      const setting = JSON.parse(localStorage.getItem("setting.Taro"))
+      const setting = JSON.parse(localStorage.getItem("setting.WeebHub Nexus"))
 
       if (
         setting?.appearence?.featuredSection ||

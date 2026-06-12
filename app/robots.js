@@ -10,6 +10,6 @@ export default function robots() {
         '/api/'
       ],
     },
-    sitemap: 'https://taro-anime.vercel.app/sitemap.xml',
+    sitemap: 'https://weebhub-nexus-anime.vercel.app/sitemap.xml',
   }
 }

@@ -15,7 +15,7 @@ const TrendingCard = ({ info }) => {
   const videoRef = useRef(null);
 
   useEffect(() => {
-    setVideoPlay(JSON.parse(localStorage.getItem("setting.Taro") || '{}')?.Preferences?.trendingCardVideo || false)
+    setVideoPlay(JSON.parse(localStorage.getItem("setting.WeebHub Nexus") || '{}')?.Preferences?.trendingCardVideo || false)
   }, [])
 
   useEffect(() => {

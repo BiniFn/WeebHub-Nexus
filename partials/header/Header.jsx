@@ -21,7 +21,7 @@ const Header = () => {
           <Link href={"/"} className={`${nightTokyo.className} text-white flex items-center gap-2`}>
             <Image
               src="/images/logo.png"
-              alt="Taro"
+              alt="WeebHub Nexus"
               width={50}
               height={50} />
             <span className="text-3xl">TARO</span>

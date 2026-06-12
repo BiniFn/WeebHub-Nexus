@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { motion } from "framer-motion";
-import Anilist from "@consumet/extensions/dist/providers/meta/anilist";
+import { searchAnime } from "@/actions/search";
 
 const useDebounce = (value, delay) => {
   const [debouncedValue, setDebouncedValue] = useState(value);
@@ -73,9 +73,7 @@ const SearchResults = ({ searchValue }) => {
       return;
     }
     try {
-      const anilist_consumet = new Anilist()
-
-      const dataJSON = await anilist_consumet.search(debouncedSearchValue)
+      const dataJSON = await searchAnime(debouncedSearchValue);
       if (dataJSON?.results?.length === 0) {
         setData("NO_RESULT_FOUND");
       } else {

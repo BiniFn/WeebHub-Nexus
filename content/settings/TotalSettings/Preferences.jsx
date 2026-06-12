@@ -23,7 +23,7 @@ const Preferences = () => {
 
 
   useEffect(() => {
-    const jsonifiedLocalsotrage = JSON.parse(localStorage.getItem("setting.Taro") || '{}')
+    const jsonifiedLocalsotrage = JSON.parse(localStorage.getItem("setting.WeebHub Nexus") || '{}')
 
     if (jsonifiedLocalsotrage?.appearence) {
       if (jsonifiedLocalsotrage?.Preferences?.homePageTrailer) setHomePageTrailer(jsonifiedLocalsotrage?.Preferences?.homePageTrailer === true || false)
@@ -33,9 +33,9 @@ const Preferences = () => {
   }, [])
 
   useEffect(() => {
-    const jsonifiedLocalsotrage = JSON.parse(localStorage.getItem("setting.Taro") || '{}')
+    const jsonifiedLocalsotrage = JSON.parse(localStorage.getItem("setting.WeebHub Nexus") || '{}')
 
-    localStorage.setItem("setting.Taro", JSON.stringify({
+    localStorage.setItem("setting.WeebHub Nexus", JSON.stringify({
       ...jsonifiedLocalsotrage, Preferences: {
         homePageTrailer,
         upscaledBanner,

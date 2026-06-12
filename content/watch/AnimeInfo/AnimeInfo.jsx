@@ -7,7 +7,7 @@ const AnimeInfo = ({ info }) => {
     <div className="text-white flex gap-6">
       <Image
         src={info?.coverImage?.extraLarge}
-        alt="Taro"
+        alt="WeebHub Nexus"
         width={215}
         height={300}
         className="rounded-2xl object-cover h-80 w-[16rem] max-[840px]:h-[14rem] max-[380px]:h-[9rem]"

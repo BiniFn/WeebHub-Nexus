@@ -21,9 +21,9 @@ const nextConfig = {
     ANILIST_CLIENT_SECRET: process.env.ANILIST_CLIENT_SECRET,
     GRAPHQL_ENDPOINT: process.env.GRAPHQL_ENDPOINT,
   },
-
-
-
+  experimental: {
+    serverComponentsExternalPackages: ['@consumet/extensions', 'got-scraping'],
+  },
 };
 
 export default nextConfig;

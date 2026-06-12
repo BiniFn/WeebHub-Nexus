@@ -34,7 +34,7 @@ const Comments = ({ AnimeID, title }) => {
 
       <div className='px-3' style={{ display: loading ? 'none' : 'block' }}>
         <DiscussionEmbed
-          shortname='taro-6'
+          shortname='weebhub-nexus-6'
           config={{
             url: `${process.env.NEXT_PUBLIC_URL}${pathname}`,
             identifier: AnimeID,
