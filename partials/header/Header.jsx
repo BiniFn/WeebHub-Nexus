@@ -7,6 +7,7 @@ import Search from "./Search"
 import { PiBellRingingFill as Bell } from "react-icons/pi";
 import Responsive from "./Responsive"
 import Profile from "./Profile"
+import NotificationBell from "./NotificationBell";
 
 
 const Header = () => {
@@ -30,9 +31,7 @@ const Header = () => {
         <div className={styles.right}>
           <Search />
           {/* notification */}
-          <div className="text-2xl text-slate-200">
-            <Bell />
-          </div>
+          <NotificationBell />
 
           {/* profile */}
           <Profile />

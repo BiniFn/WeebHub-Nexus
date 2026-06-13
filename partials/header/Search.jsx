@@ -14,9 +14,16 @@ const Search = () => {
   const [hasMounted, setHasMounted] = useState(false);
   const [searchValue, setSearchValue] = useState("")
 
+  const pathname = usePathname()
+
   useEffect(() => {
     setHasMounted(true);
   }, []);
+
+  useEffect(() => {
+    setSearchValue("");
+    setIsSearchBoxOpen(false);
+  }, [pathname]);
 
   if (!hasMounted) {
     return null; // or a loader/spinner
