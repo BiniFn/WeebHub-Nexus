@@ -6,7 +6,7 @@ export async function getMappings(title) {
   if (!title) return null;
   if (!title?.english && !title?.romaji) return null;
 
-  const baseUrl = process.env.NEXT_PUBLIC_CONSUMET_URL || "https://weebhub-streaming-api.onrender.com";
+  const baseUrl = process.env.NEXT_PUBLIC_CONSUMET_URL || "https://consumet-api-ivory.vercel.app";
 
   const fetchSearch = async (query) => {
     try {

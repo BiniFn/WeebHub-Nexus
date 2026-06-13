@@ -31,7 +31,7 @@ const Herosection = ({ data }) => {
       {populardata ?
         <div className={`absolute top-[35%] left-32 z-10 max-[1320px]:left-[2%]`}>
           <h3 className="text-[1.3rem] my-2 text-[#ed2672] font-medium max-[500px]:text-[18px]">#{data?.indexOf(populardata) + 1} Trending</h3>
-          <h1 className="text-6xl text-white font-medium w-full max-w-[60rem] tracking-normal overflow-hidden text-ellipsis line-clamp-1 font-['Outfit'] max-[794px]:text-4xl">{populardata?.title?.english || populardata?.title?.romaji}</h1>
+          <h1 className="text-6xl text-white font-medium w-full max-w-[60rem] tracking-normal font-['Outfit'] max-[794px]:text-4xl">{populardata?.title?.english || populardata?.title?.romaji}</h1>
 
           <div className="flex items-center gap-4 max-[500px]:text-[14px]">
             <span className='flex items-center text-white my-2'>

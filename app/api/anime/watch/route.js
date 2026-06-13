@@ -6,7 +6,7 @@ const fetchStreamingData = async (episodeId, isDub) => {
       throw new Error("Invalid or missing episodeId");
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_CONSUMET_URL || "https://weebhub-streaming-api.onrender.com";
+    const baseUrl = process.env.NEXT_PUBLIC_CONSUMET_URL || "https://consumet-api-ivory.vercel.app";
     const url = `${baseUrl}/anime/gogoanime/watch/${encodeURIComponent(episodeId)}`;
     
     const res = await fetch(url);

@@ -8,7 +8,7 @@ export const getEpisodes = async (id, title) => {
     const mappingID = await getMappings(title);
     if (!mappingID) return [];
 
-    const baseUrl = process.env.NEXT_PUBLIC_CONSUMET_URL || "https://weebhub-streaming-api.onrender.com";
+    const baseUrl = process.env.NEXT_PUBLIC_CONSUMET_URL || "https://consumet-api-ivory.vercel.app";
     const res = await fetch(`${baseUrl}/anime/gogoanime/info/${mappingID}`);
     const animeInfo = res.ok ? await res.json() : {};
     

@@ -63,7 +63,7 @@ const FeaturedAnime = ({ data }) => {
 
           <div>
             <h3 className="text-[20px] my-2 text-[#ed2672] font-medium max-[500px]:text-[18px]">#{data?.indexOf(populardata) + 1} Trending</h3>
-            <h1 className="text-[32px] text-white font-medium w-full max-w-[60rem] tracking-normal overflow-hidden text-ellipsis line-clamp-1 font-['Outfit'] max-[794px]:text-3xl">{populardata?.title?.english || populardata?.title?.romaji}</h1>
+            <h1 className="text-[32px] text-white font-medium w-full max-w-[60rem] tracking-normal font-['Outfit'] max-[794px]:text-3xl">{populardata?.title?.english || populardata?.title?.romaji}</h1>
 
             <div className="flex items-center gap-4 max-[500px]:text-[14px]">
               <span className='flex items-center text-white my-2'>
