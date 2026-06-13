@@ -2,7 +2,7 @@
 
 import { fetchWatchData } from "@/lib/StreamingVideo";
 import { useSearchParams } from "next/navigation";
-import { createContext, useContext, useEffect, useState, useMemo } from "react";
+import { createContext, useContext, useEffect, useState, useMemo, useCallback } from "react";
 import { toast } from "react-toastify";
 
 export const WatchAreaContext = createContext();
@@ -19,13 +19,13 @@ export function WatchAreaContextProvider({ children, AnimeInfo }) {
   const [isDub, setIsDub] = useState(false);
   const [episodes, setEpisodes] = useState("loading");
   const [server, setServer] = useState("sub");
+  const [provider, setProvider] = useState(null); // null = auto (best available)
 
   const [sub, dub] = episodes !== "loading" && episodes.length > 0
     ? [episodes.filter(e => e?.isSubbed), episodes.filter(e => e?.isDubbed)]
     : [[], []];
 
-
-
+  // Fetch streaming data when episode, server, or provider changes
   useEffect(() => {
     if (!episodes || episodes === "loading") return;
 
@@ -44,12 +44,18 @@ export function WatchAreaContextProvider({ children, AnimeInfo }) {
           return;
         }
 
-        const titleToSearch = AnimeInfo?.title?.english || AnimeInfo?.title?.romaji;
-        
+        // Use AniList ID for provider resolution (much more reliable than title search)
+        const animeId = AnimeInfo?.id;
+        const isDubRequested = server === "dub";
+
         const [watchData, episodeData] = await Promise.all([
-          fetchWatchData(titleToSearch, episode, !!(server === "dub")),
-          findEpisodeData(!!(server === "dub") ? dub : sub, episode),
+          fetchWatchData(animeId, episode, isDubRequested, provider),
+          findEpisodeData(isDubRequested ? dub : sub, episode),
         ]);
+
+        if (watchData?.sources?.length > 0 && watchData.provider) {
+          console.log(`✅ Playing from provider: ${watchData.provider} (${watchData.audioType})`);
+        }
 
         setWatchInfo({
           watchData,
@@ -65,10 +71,9 @@ export function WatchAreaContextProvider({ children, AnimeInfo }) {
     };
 
     fetchData();
-  }, [episode, server, episodes]);
+  }, [episode, server, episodes, provider]);
 
-
-
+  // Restore episode from watch history
   useEffect(() => {
     if (typeof window !== "undefined") {
       const watchHistory = JSON.parse(localStorage.getItem("watch_history")) || {};
@@ -85,14 +90,10 @@ export function WatchAreaContextProvider({ children, AnimeInfo }) {
     return selectedList?.find((item) => item.number === episodeNumber);
   };
 
-
-  const handleError = (error, isMounted) => {
-    console.error("Failed to fetch watch data:", error);
-    if (isMounted) {
-      setWatchInfo({ loading: false, error: "Failed to fetch data" });
-      toast("Failed to fetch data");
-    }
-  };
+  // Allow switching providers on-the-fly
+  const switchProvider = useCallback((newProvider) => {
+    setProvider(newProvider === "auto" ? null : newProvider);
+  }, []);
 
   const contextValue = useMemo(
     () => ({
@@ -106,9 +107,11 @@ export function WatchAreaContextProvider({ children, AnimeInfo }) {
       AnimeInfo,
       server,
       setServer,
+      provider,
+      switchProvider,
       animeid: AnimeInfo?.id,
     }),
-    [episode, watchInfo, isDub, episodes, server, setServer, AnimeInfo]
+    [episode, watchInfo, isDub, episodes, server, setServer, provider, switchProvider, AnimeInfo]
   );
 
   return (

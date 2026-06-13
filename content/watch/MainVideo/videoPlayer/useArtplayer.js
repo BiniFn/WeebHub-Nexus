@@ -16,11 +16,25 @@ const useArtplayer = (getInstance) => {
   useEffect(() => {
     if (!watchInfo?.watchData?.sources?.length || watchInfo.loading) return;
 
-    const M3U8Url = watchInfo.watchData.sources[0]?.url;
-    if (!M3U8Url) return;
+    const source = watchInfo.watchData.sources[0];
+    const sourceUrl = source?.url;
+    if (!sourceUrl) return;
 
-    const proxyUrl = `https://m3-u8-proxy-iota.vercel.app/m3u8-proxy?url=${M3U8Url}&headers=%7B%22referer%22%3A%22https%3A%2F%2F9anime.pl%22%7D`;
-    // const proxyUrl = `/api/video/m3u8-proxy?url=${M3U8Url}&headers=%7B%22referer%22%3A%22https%3A%2F%2F9anime.pl%22%7D`;
+    const isM3U8 = source.isM3U8 || sourceUrl.includes('.m3u8');
+    const sourceHeaders = source.headers || watchInfo.watchData.headers || {};
+
+    // Build proxy URL for m3u8 streams that need referer headers
+    let playUrl;
+    if (isM3U8) {
+      const referer = sourceHeaders?.Referer || sourceHeaders?.referer || 'https://megaplay.buzz/';
+      const headerObj = { referer };
+      playUrl = `https://m3-u8-proxy-iota.vercel.app/m3u8-proxy?url=${encodeURIComponent(sourceUrl)}&headers=${encodeURIComponent(JSON.stringify(headerObj))}`;
+    } else {
+      // Direct mp4 — use as-is
+      playUrl = sourceUrl;
+    }
+
+    const mediaType = isM3U8 ? 'm3u8' : 'mp4';
 
 
     if (artInstance.current) {
@@ -31,8 +45,8 @@ const useArtplayer = (getInstance) => {
     try {
       const art = new Artplayer({
         container: artRef.current,
-        url: proxyUrl,
-        type: "m3u8",
+        url: playUrl,
+        type: mediaType,
         autoplay: watchSetting?.autoPlay,
         setting: true,
         theme: "#7569c8",
@@ -103,6 +117,9 @@ const useArtplayer = (getInstance) => {
             } else {
               art.notice.show = "Unsupported playback format: m3u8";
             }
+          },
+          mp4: (video, url) => {
+            video.src = url;
           },
         },
       });
