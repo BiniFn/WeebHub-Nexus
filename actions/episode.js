@@ -2,7 +2,7 @@
 import { ANIME } from "@consumet/extensions";
 import { getMappings } from "./mapping";
 
-const kaianime = new ANIME.AnimeKai();
+const provider = new ANIME.Gogoanime();
 
 
 export const getEpisodes = async (id, title) => {
@@ -12,7 +12,7 @@ export const getEpisodes = async (id, title) => {
     const mappingID = await getMappings(title);
     if (!mappingID) return [];
 
-    const animeInfo = await kaianime.fetchAnimeInfo(mappingID);
+    const animeInfo = await provider.fetchAnimeInfo(mappingID);
     let episodes = animeInfo?.episodes || [];
 
     const coverMeta = await fetchEpisodeMeta(id);

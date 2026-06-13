@@ -1,5 +1,5 @@
 import { StreamingServers } from "@consumet/extensions";
-import AnimeKai from "@consumet/extensions/dist/providers/anime/animekai";
+import { ANIME } from "@consumet/extensions";
 import { NextResponse } from "next/server";
 
 const fetchStreamingData = async (episodeId, isDub) => {
@@ -8,11 +8,10 @@ const fetchStreamingData = async (episodeId, isDub) => {
       throw new Error("Invalid or missing episodeId");
     }
 
-    const animekai = new AnimeKai();
-    const data = await animekai.fetchEpisodeSources(
+    const provider = new ANIME.Gogoanime();
+    const data = await provider.fetchEpisodeSources(
       episodeId,
-      StreamingServers.MegaUp,
-      !!isDub ? "dub" : "sub"
+      StreamingServers.VidStreaming,
     );
 
 

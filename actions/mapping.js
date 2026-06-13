@@ -2,7 +2,7 @@
 import { ANIME } from '@consumet/extensions';
 import { compareTwoStrings } from 'string-similarity';
 
-const kaianime = new ANIME.AnimeKai();
+const provider = new ANIME.Gogoanime();
 
 
 export async function getMappings(title) {
@@ -11,8 +11,8 @@ export async function getMappings(title) {
   if (!title?.english && !title?.romaji) return null;
 
   //** */ main logic
-  let eng = title?.english ? await kaianime.search(title?.english) : null;
-  let rom = title?.romaji ? await kaianime.search(title?.romaji) : null;
+  let eng = title?.english ? await provider.search(title?.english) : null;
+  let rom = title?.romaji ? await provider.search(title?.romaji) : null;
   // console.log(eng, rom)
   let english_search = eng?.results || [];
   let romaji_search = rom?.results || [];
