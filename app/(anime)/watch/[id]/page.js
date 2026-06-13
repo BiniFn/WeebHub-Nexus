@@ -51,7 +51,7 @@ const Watch = async ({ params }) => {
             </WatchAreaContextProvider>
           </WatchSettingContextProvider>
 
-          <div className="mt-20 flex gap-44">
+          <div className="mt-20 flex gap-44 max-[900px]:flex-col max-[900px]:gap-10">
             <AnimeInfo info={animeInfo} />
             <Rating info={animeInfo} />
           </div>

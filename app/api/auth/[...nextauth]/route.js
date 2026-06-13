@@ -17,7 +17,7 @@ export const authOptions = {
         params: { scope: "", response_type: "code" },
       },
       userinfo: {
-        url: process.env.GRAPHQL_ENDPOINT,
+        url: "https://graphql.anilist.co",
         async request(context) {
           const { data } = await fetch("https://graphql.anilist.co", {
             method: "POST",
@@ -120,6 +120,9 @@ export const authOptions = {
       session.user = token;
       return session;
     },
+  },
+  pages: {
+    signIn: "/auth/signin",
   },
 };
 
