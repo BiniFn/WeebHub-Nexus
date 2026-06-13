@@ -8,12 +8,11 @@ const kaianime = new ANIME.AnimeKai();
 export async function getMappings(title) {
   // basic checks
   if (!title) return null;
-  if (!title?.english) return null;
-  if (!title?.romaji) return null;
+  if (!title?.english && !title?.romaji) return null;
 
   //** */ main logic
-  let eng = await kaianime.search(title?.english);
-  let rom = await kaianime.search(title?.romaji);
+  let eng = title?.english ? await kaianime.search(title?.english) : null;
+  let rom = title?.romaji ? await kaianime.search(title?.romaji) : null;
   // console.log(eng, rom)
   let english_search = eng?.results || [];
   let romaji_search = rom?.results || [];

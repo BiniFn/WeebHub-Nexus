@@ -24,7 +24,7 @@ const Header = () => {
               alt="WeebHub Nexus"
               width={50}
               height={50} />
-            <span className="text-3xl">TARO</span>
+            <span className="text-3xl text-nowrap">WeebHub Nexus</span>
           </Link>
 
           {/* links */}
