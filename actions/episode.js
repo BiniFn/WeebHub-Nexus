@@ -5,58 +5,40 @@ export const getEpisodes = async (id, title) => {
   if (!id || !title) return [];
 
   try {
-    const mappingID = await getMappings(title);
-    if (!mappingID) return [];
-
-    const baseUrl = process.env.NEXT_PUBLIC_CONSUMET_URL || "https://consumet-api-ivory.vercel.app";
-    const res = await fetch(`${baseUrl}/anime/gogoanime/info/${mappingID}`);
-    const animeInfo = res.ok ? await res.json() : {};
-    
-    let episodes = animeInfo?.episodes || [];
-
     const coverMeta = await fetchEpisodeMeta(id);
-    if (coverMeta.length > 0) {
-      episodes = await CombineEpisodeMeta(episodes, coverMeta);
-    }
+    if (!coverMeta || coverMeta.length === 0) return [];
 
-    return episodes;
+    // Construct the episode array natively from AniZip metadata
+    const episodes = coverMeta.map((meta, index) => {
+      const episodeNum = meta.number || meta.episode || (index + 1);
+      
+      let epTitle = `Episode ${episodeNum}`;
+      if (meta.title) {
+        if (typeof meta.title === 'object') {
+          epTitle = meta.title.en || meta.title['x-jat'] || epTitle;
+        } else {
+          epTitle = meta.title;
+        }
+      }
+
+      return {
+        id: `ep-${episodeNum}`,
+        number: episodeNum,
+        title: epTitle,
+        image: meta.img || meta.image || null,
+        description: meta.description || meta.overview || meta.summary || '',
+        isSubbed: true,
+        isDubbed: true
+      };
+    });
+
+    return episodes.sort((a, b) => a.number - b.number);
   } catch (error) {
     console.error("Error fetching episodes:", error);
     return [];
   }
 };
 
-function CombineEpisodeMeta(episodeData, imageData) {
-  const episodeImages = {};
-
-  // Map image data by episode number
-  imageData.forEach((image) => {
-    const episodeNum = image.number || image.episode;
-    if (episodeNum) {
-      episodeImages[episodeNum] = image;
-    }
-  });
-
-  // Process each episode
-  episodeData.forEach((episode) => {
-    const episodeNum = episode.number;
-    if (episodeNum in episodeImages) {
-      const imageData = episodeImages[episodeNum];
-
-      episode.image = imageData.img || imageData.image || null;
-      episode.description = imageData.description || imageData.overview || imageData.summary || '';
-
-      // Handle different title formats
-      if (typeof imageData.title === 'object') {
-        episode.title = imageData.title.en || imageData.title['x-jat'] || `Episode ${episodeNum}`;
-      } else {
-        episode.title = imageData.title || `Episode ${episodeNum}`;
-      }
-    }
-  });
-
-  return episodeData;
-}
 async function fetchEpisodeMeta(id) {
   if (!id) return [];
 
