@@ -51,12 +51,12 @@ const VideoPlayerContainer = ({ getInstance }) => {
                   Watch on AnimePahe
                 </a>
                 <a 
-                  href={`https://hianime.to/search?keyword=${encodeURIComponent(watchInfo?.title || '')}`} 
+                  href={`https://animeverse.to/search?q=${encodeURIComponent(watchInfo?.title || '')}`} 
                   target="_blank" 
                   rel="noreferrer"
                   className="bg-[#242735] hover:bg-[#2a2d3d] border border-[#39374b] text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center gap-2"
                 >
-                  Watch on HiAnime
+                  Watch on Animeverse
                 </a>
               </div>
             </div>
