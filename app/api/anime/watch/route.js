@@ -1,5 +1,3 @@
-import { StreamingServers } from "@consumet/extensions";
-import { ANIME } from "@consumet/extensions";
 import { NextResponse } from "next/server";
 
 const fetchStreamingData = async (episodeId, isDub) => {
@@ -8,12 +6,16 @@ const fetchStreamingData = async (episodeId, isDub) => {
       throw new Error("Invalid or missing episodeId");
     }
 
-    const provider = new ANIME.Gogoanime();
-    const data = await provider.fetchEpisodeSources(
-      episodeId,
-      StreamingServers.VidStreaming,
-    );
+    const baseUrl = process.env.NEXT_PUBLIC_CONSUMET_URL || "https://weebhub-streaming-api.onrender.com";
+    const url = `${baseUrl}/anime/gogoanime/watch/${encodeURIComponent(episodeId)}`;
+    
+    const res = await fetch(url);
+    if (!res.ok) {
+      console.warn(`Consumet server error: ${res.status}`);
+      return [];
+    }
 
+    const data = await res.json();
 
     if (!data || (data.message === "Anime not found" && (!Array.isArray(data) || data.length < 1))) {
       console.warn(`No data found for episode ${episodeId}`);
@@ -31,7 +33,6 @@ export async function GET(req, { params }) {
   try {
     const episodeId = decodeURIComponent(req.nextUrl.searchParams.get("episodeid"))
     const isdub = req.nextUrl.searchParams.get("isdub");
-
 
     if (!episodeId) {
       return NextResponse.json({ error: "Episode ID is required" }, { status: 400 });

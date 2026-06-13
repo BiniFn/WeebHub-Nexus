@@ -1,9 +1,5 @@
 "use server";
-import { ANIME } from "@consumet/extensions";
 import { getMappings } from "./mapping";
-
-const provider = new ANIME.Gogoanime();
-
 
 export const getEpisodes = async (id, title) => {
   if (!id || !title) return [];
@@ -12,7 +8,10 @@ export const getEpisodes = async (id, title) => {
     const mappingID = await getMappings(title);
     if (!mappingID) return [];
 
-    const animeInfo = await provider.fetchAnimeInfo(mappingID);
+    const baseUrl = process.env.NEXT_PUBLIC_CONSUMET_URL || "https://weebhub-streaming-api.onrender.com";
+    const res = await fetch(`${baseUrl}/anime/gogoanime/info/${mappingID}`);
+    const animeInfo = res.ok ? await res.json() : {};
+    
     let episodes = animeInfo?.episodes || [];
 
     const coverMeta = await fetchEpisodeMeta(id);
