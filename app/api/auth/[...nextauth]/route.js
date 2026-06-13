@@ -1,10 +1,18 @@
 import NextAuth from "next-auth"
-import { MongoDBAdapter } from "@auth/mongodb-adapter"
-import clientPromise from "@/mongodb/db";
+import PostgresAdapter from "@auth/pg-adapter"
+import { Pool } from "pg"
 import { getServerSession } from "next-auth"
 
+let pool;
+if (process.env.DATABASE_URL) {
+  pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: true,
+  });
+}
+
 export const authOptions = {
-  adapter: MongoDBAdapter(clientPromise),
+  ...(pool && { adapter: PostgresAdapter(pool) }),
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
     {

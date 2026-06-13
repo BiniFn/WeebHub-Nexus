@@ -44,8 +44,10 @@ export function WatchAreaContextProvider({ children, AnimeInfo }) {
           return;
         }
 
+        const titleToSearch = AnimeInfo?.title?.english || AnimeInfo?.title?.romaji;
+        
         const [watchData, episodeData] = await Promise.all([
-          fetchWatchData(currentEpisode.id, !!(server === "dub")),
+          fetchWatchData(titleToSearch, episode, !!(server === "dub")),
           findEpisodeData(!!(server === "dub") ? dub : sub, episode),
         ]);
 

@@ -1,4 +1,4 @@
-import Collection from "@/content/Home/Collection";
+
 import FeaturedAnime from "@/content/Home/FeaturedAnime/FeaturedAnime";
 import Herosection from "@/content/Home/HeroSection/Herosection"
 import Popular from "@/content/Home/Popular";
@@ -22,7 +22,7 @@ const Home = async () => {
         <Trending data={trendingdata} />
         <FeaturedAnime data={trendingdata} />
         <WatchHistory />
-        <Collection />
+
         <Popular />
         <Season data={seasonaldata} />
       </div>
