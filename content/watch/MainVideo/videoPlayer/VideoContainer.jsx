@@ -32,7 +32,15 @@ const VideoPlayerContainer = ({ getInstance }) => {
             <LoadingVideo />
           ) : watchInfo?.watchData?.sources?.length > 0 ? (
             <>
-              <div ref={artRef} className="w-full h-full"></div>
+              {watchInfo?.watchData?.sources?.[0]?.isIframe ? (
+                <iframe 
+                  src={watchInfo.watchData.sources[0].url}
+                  className="w-full h-full border-0 bg-black"
+                  allowFullScreen
+                ></iframe>
+              ) : (
+                <div ref={artRef} className="w-full h-full bg-black"></div>
+              )}
               {/* Provider Badge */}
               <div className="absolute top-3 right-3 z-40 flex items-center gap-2">
                 <button

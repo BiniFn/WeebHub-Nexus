@@ -67,6 +67,60 @@ async function resolveJustAnime(anilistId, episode, preferredProvider, audioType
   return null;
 }
 
+// ─── Anipub Scraper (Fallback) ─────────────────────────────────
+async function scrapeAnipub(title, episode) {
+  try {
+    const searchRes = await fetch(`https://www.anipub.xyz/api/search/${encodeURIComponent(title)}`, {
+      signal: AbortSignal.timeout(8000)
+    });
+    if (!searchRes.ok) return null;
+    
+    const searchData = await searchRes.json();
+    if (!Array.isArray(searchData) || searchData.length === 0) return null;
+    
+    // Pick the first result's Id
+    const anipubId = searchData[0].Id;
+    if (!anipubId) return null;
+    
+    const detailsRes = await fetch(`https://www.anipub.xyz/v1/api/details/${anipubId}`, {
+      signal: AbortSignal.timeout(8000)
+    });
+    if (!detailsRes.ok) return null;
+    
+    const detailsData = await detailsRes.json();
+    const local = detailsData.local;
+    if (!local) return null;
+    
+    let targetLink = null;
+    if (episode === 1 && local.link) {
+      targetLink = local.link;
+    } else if (episode > 1 && Array.isArray(local.ep)) {
+      const epIndex = episode - 2;
+      if (local.ep[epIndex] && local.ep[epIndex].link) {
+        targetLink = local.ep[epIndex].link;
+      }
+    }
+    
+    if (!targetLink) return null;
+    
+    const iframeUrl = targetLink.replace(/^src=/, '');
+    if (!iframeUrl) return null;
+    
+    return {
+      provider: "anipub",
+      audioType: "sub", // Anipub defaults to sub
+      sources: [{ url: iframeUrl, quality: "auto", isM3U8: false, isIframe: true }],
+      subtitles: [],
+      intro: null,
+      outro: null,
+      headers: null,
+    };
+  } catch (err) {
+    console.error("Anipub scraper error:", err.message);
+    return null;
+  }
+}
+
 // ─── AnikotoTV Scraper (Fallback) ─────────────────────────────────
 async function scrapeAnikoto(title, episode) {
   const headers = {
@@ -231,6 +285,13 @@ export async function GET(req) {
       }
 
       if (searchTitle) {
+        // Try Anipub first
+        const anipubResult = await scrapeAnipub(searchTitle, ep);
+        if (anipubResult) {
+          return Response.json(anipubResult);
+        }
+
+        // Then Anikoto
         const fallback = await scrapeAnikoto(searchTitle, ep);
         if (fallback) {
           return Response.json(fallback);
@@ -241,7 +302,7 @@ export async function GET(req) {
     return Response.json(
       {
         error: "No streaming sources found across all providers",
-        providers_tried: anilistId ? [...PROVIDERS, "anikoto"] : ["anikoto"],
+        providers_tried: anilistId ? [...PROVIDERS, "anipub", "anikoto"] : ["anipub", "anikoto"],
       },
       { status: 404 }
     );
