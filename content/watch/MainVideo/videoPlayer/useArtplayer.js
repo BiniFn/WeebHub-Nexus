@@ -23,17 +23,9 @@ const useArtplayer = (getInstance) => {
     const isM3U8 = source.isM3U8 || sourceUrl.includes('.m3u8');
     const sourceHeaders = source.headers || watchInfo.watchData.headers || {};
 
-    // Build proxy URL for m3u8 streams that need referer headers
-    let playUrl;
-    if (isM3U8) {
-      const referer = sourceHeaders?.Referer || sourceHeaders?.referer || 'https://megaplay.buzz/';
-      const headerObj = { referer };
-      playUrl = `https://m3-u8-proxy-iota.vercel.app/m3u8-proxy?url=${encodeURIComponent(sourceUrl)}&headers=${encodeURIComponent(JSON.stringify(headerObj))}`;
-    } else {
-      // Direct mp4 — use as-is
-      playUrl = sourceUrl;
-    }
-
+    // Use the source URL directly. The external proxy is broken, and 
+    // Megaplay / AnimeGG support direct playback via CORS anyway.
+    const playUrl = sourceUrl;
     const mediaType = isM3U8 ? 'm3u8' : 'mp4';
 
 
